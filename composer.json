@@ -1,0 +1,20 @@
+{
+    "name": "leovant/leo-php-utils",
+    "description": "PHP utilities.",
+    "homepage": "https://github.com/leovant/leo-php-utils",
+    "authors":[
+        {
+            "name": "Leovan Tavares",
+            "email": "leovant@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "LeoUtils\\":"src/"
+        }
+    },
+    "require": {
+        "justinrainbow/json-schema": "^4.1"
+    }
+}
