@@ -1,6 +1,8 @@
 <?php
 
 namespace LeoUtils;
+
+require_once __DIR__ . '/../vendor/autoload.php';
 /**
  * Validates data according to a JSON schema.
  */
@@ -23,7 +25,7 @@ class JsonSchemaValidator
      *
      * @var object
      */
-    protected $resolver;
+    //protected $resolver;
     /**
      * Validator.
      *
@@ -37,7 +39,7 @@ class JsonSchemaValidator
      */
     public function __construct($schema = null)
     {
-        $this->resolver = new \JsonSchema\RefResolver(new \JsonSchema\Uri\UriRetriever(), new \JsonSchema\Uri\UriResolver());
+        //$this->resolver = new \JsonSchema\RefResolver(new \JsonSchema\Uri\UriRetriever(), new \JsonSchema\Uri\UriResolver());
         $this->validator = new \JsonSchema\Validator();
         $this->errors = [];
 
@@ -53,7 +55,8 @@ class JsonSchemaValidator
      */
     public function withSchema($schema)
     {
-        $this->schema = $this->resolver->resolve('file://' . realpath($schema));
+        //$this->schema = $this->resolver->resolve('file://' . realpath($schema));
+        $this->schema = (object) ['$ref' => 'file://' . realpath($schema)];
         return $this;
     }
     /**
@@ -73,7 +76,7 @@ class JsonSchemaValidator
      */
     public function check($data)
     {
-        $this->validator->check($data, $schema);
+        $this->validator->check($data, $this->schema);
 
         if ($this->validator->isValid()) {
             return true;
@@ -93,7 +96,7 @@ class JsonSchemaValidator
         if ($this->check($data)) {
             return;
         }
-        $ex = new Exception(LeoUtils\HttpCode::BAD_REQUEST, _('Incorrect JSON.'));
+        $ex = new Exception(_('Incorrect JSON.'), HttpCode::BAD_REQUEST);
         $ex->withDetails($this->errors)->throw();
     }
 }
